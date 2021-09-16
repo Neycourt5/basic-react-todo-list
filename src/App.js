@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Header from './components/Header'
 import Tasks from './components/Tasks'
+import Addtask from './components/Addtask'
 
 function App() {
   const [tasks, addTask] = useState([{
@@ -23,10 +24,38 @@ function App() {
   }
   ])
 
+  // Holds the state of a boolean that controls the visibility of the form
+  const [showAddTasks, setShowAddTasks] = useState(false)
+
+  // Clicking the delete button will supply the function with the id
+  const onDelete = (id) => addTask(tasks.filter((task) => task.id !== id))
+
+  // Add a task to the list of tasks
+  const onAdd = (task) => {
+    const id = tasks.length + 1
+    const newTask = { id, ...task }
+    addTask({ ...tasks, newTask })
+    console.log(newTask)
+  }
+
+  console.log(tasks)
+
   return (
-    <div className="App">
-      <Header tasks={tasks} />
-      <Tasks tasks={tasks} />
+    <div className="container">
+      <Header
+        tasks={tasks}
+        showAddTasks={showAddTasks}
+        setShowAddTasks={setShowAddTasks}
+      />
+      <Addtask
+        showAddTasks={showAddTasks}
+        tasks={tasks}
+        onAdd={onAdd}
+      />
+      <Tasks
+        tasks={tasks}
+        onDelete={onDelete}
+      />
     </div>
   );
 }
